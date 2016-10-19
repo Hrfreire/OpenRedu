@@ -3,6 +3,7 @@
 
 // Carrega a imagem da modal do tipo de aula quando ela é aberta.
 $(document).on("shown", ".modal-multimedia", function(e) {
+  console.log("entrei");
   var $modal = $(this);
   var $image = $modal.find("img.lazy");
 

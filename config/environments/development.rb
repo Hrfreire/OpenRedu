@@ -44,6 +44,8 @@ Redu::Application.configure do
   config.paperclip_environment.merge!(config.paperclip)
   config.paperclip_user.merge!(config.paperclip)
 
+  config.paperclip_question_image.merge!(config.paperclip)
+
   config.paperclip_documents = config.paperclip.merge({
     :styles => {},
     :default_url => ''

@@ -1,6 +1,13 @@
 <div class="question">
   <p><%= question.statement %></p>
 </div>
+<% if question.image %>
+  <div>
+   <%= link_to image_path(question.image.url), target: '_blank' do %>
+      <%= image_tag question.image.url, class: "image", :options => {"data-toggle" => "modal"} %>
+    <% end %>
+  </div>
+<% end %>
 
 <% if review %>
   <div class="justification">

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130601184428) do
+ActiveRecord::Schema.define(:version => 20161011005143) do
 
   create_table "alternatives", :force => true do |t|
     t.text     "text"
@@ -502,8 +502,12 @@ ActiveRecord::Schema.define(:version => 20130601184428) do
     t.text     "statement"
     t.text     "explanation"
     t.integer  "position"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "quotas", :force => true do |t|
