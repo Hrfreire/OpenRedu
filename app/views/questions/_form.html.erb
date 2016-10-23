@@ -3,10 +3,23 @@
 </div>
 <% if question.image %>
   <div>
-   <%= link_to image_path(question.image.url), target: '_blank' do %>
-      <%= image_tag question.image.url, class: "image", :options => {"data-toggle" => "modal"} %>
+   <%= link_to "#image-modal",  "data-toggle" => "modal" do %>
+      <%= image_tag question.image.url, class: "image" %>
     <% end %>
   </div>
+
+  <%= content_tag :div, id: "image-modal",
+    class: "modal hide modal-grids-14 modal-fill-height" do %>
+    <div class="modal-header">
+      <%= content_tag :h3, "Imagem", class: "modal-title" %>
+    </div>
+    <%= content_tag :div,
+      image_tag(image_path(question.image.url)),
+      class: "modal-body" %>
+    <div class="modal-footer">
+      <button class="button-default" data-dismiss="modal">Voltar</button>
+    </div>
+  <% end %>
 <% end %>
 
 <% if review %>
