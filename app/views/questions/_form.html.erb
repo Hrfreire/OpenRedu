@@ -1,10 +1,11 @@
 <div class="question">
   <p><%= question.statement %></p>
 </div>
+
 <% if question.image %>
   <div>
-   <%= link_to "#image-modal",  "data-toggle" => "modal" do %>
-      <%= image_tag question.image.url, class: "image" %>
+    <%= link_to "#image-modal",  "data-toggle" => "modal" do %>
+      <%= image_tag question.image.url, class: "img" %>
     <% end %>
   </div>
 
