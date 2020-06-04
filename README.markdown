@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Openredu/Openredu.svg?branch=master)](https://travis-ci.org/Openredu/Openredu)
+
 ## OpenRedu Core
 
 Este repositório contem o core do OpenRedu. O openredu-core é a parte central da plataforma social educacional OpenRedu. Também existem alguns subsistemas/serviços que estão em servidores/projetos/repositórios diferentes. A saber:
@@ -16,66 +18,13 @@ Este repositório contem o core do OpenRedu. O openredu-core é a parte central 
 - [JRedu](http://github.com/redu/jredu): Encapsulador Java para a API REST do Redu
 
 ### Setup
+[Setup Ubuntu](https://github.com/OpenRedu/OpenRedu/wiki/OpenRedu-Setup-%28Ubuntu%29)
+[Setup Windows/Mac OS/Ubuntu (Deprecated)](https://github.com/OpenRedu/OpenRedu/wiki/Redu-Setup----Deprecated)
 
-Checkout do código:
-
-```sh
-$ > git clone git@github.com:redu/redu.git
-$ > cd redu
-$ redu > bundle install --binstubs
-```
-
-Inicialização do MySQL e MongoDB
-
-```sh
-$ redu > mysqld_safe
-121212 08:45:50 mysqld_safe Logging to '/usr/local/mysql/data/scissorhands.local.err'.
-121212 08:45:50 mysqld_safe Starting mysqld daemon with databases from /usr/local/mysql/data
-```
-
-```sh
-$ redu > mongod --journal
-redu (master) > mongod --dbpath=$HOME/usr/data/   --journal
-Wed Dec 12 08:48:20 [initandlisten] MongoDB starting : pid=4144 port=27017 dbpath=/Users/guiocavalcanti/usr/data/ 32-bit host=scissorhands.local
-Wed Dec 12 08:48:21 [initandlisten] waiting for connections on port 27017
-```
-
-Criação dos bancos e esquema:
-
-```sh
-$ redu > bundle exec rake db:create
-$ redu > bundle exec rake db:schema:load
-```
-
-Inserção de dados mandatórios:
-
-```sh
-$ redu > bundle exec rake bootstrap:all
-```
-
-Inicialização do servidor de busca:
-
-```sh
-$ redu > bundle exec rake sunspot:solr:start
-```
-
-Indexação dos modelos:
-
-```sh
-$ redu > bundle exec rake sunspot:solr:reindex
-```
-
-Inicialização do servidor de desenvolvimento:
-
-```sh
-$ redu > bundle exec rails server
-```
-
-Para mais informações sobre o setup, consultar [este](https://github.com/redu/redu/wiki/Redu-Setup) guia.
 
 #### Dependências
 
-Para fazer o Redu funcionar em ambiente de desenvolvimento você precisará instalar as seguintes dependências:
+Para fazer o OpenRedu funcionar em ambiente de desenvolvimento você precisará instalar as seguintes dependências:
 
 - MySQL 5.1
 - MongoDB 2.0.6
@@ -83,41 +32,43 @@ Para fazer o Redu funcionar em ambiente de desenvolvimento você precisará inst
 
 ### Coding style
 
-O estilo e padrões de código utilizados estão disponíveis [neste](https://github.com/redu/redu/wiki/Coding-Patterns) guia. Leia com atenção antes de submeter patches.
+O estilo e padrões de código utilizados estão disponíveis [neste](https://github.com/OpenRedu/OpenRedu/wiki/Coding-Patterns) guia. Leia com atenção antes de submeter patches.
 
 ### Contribuições
+
+Todas as contribuições serão analisadas pelos integrantes da comunidade OpenRedu, o código do OpenRedu não está ligado a nenhuma instituição. É um código de software livre.
+
+Um guia muito bom é o do [GitHub](https://guides.github.com/activities/contributing-to-open-source/), ele explica detalhadamente as práticas e como contribuir como projetos de Open Source.
+
+As informações abaixo são só reforços do guia do GitHub.
 
 #### Pull requests
 
 Os passos para contribuir com a evolução do código, seja para resolução de issue ou criação de features são os seguintes:
 
-1. Criar um branch novo
+1. Fork do projeto no GitHub
+2. Criar um branch próprio para o problema
 2. Realizar mudanças ou adicionar a feature
-3. Commitar mudanças e enviá-las para o remoto
-4. Realizar pull request e atribuir a um revisor
+3. Commitar mudanças e enviá-las para o remoto do seu repositório
+4. Realizar pull request
 5. Caso existam revisões: realizar novos commits no mesmo branch criado e enviar para o remoto
 
-Um exemplo de resolução de issue seguiria o seguinte fluxo:
+#### Reportando issues
 
-Assumindo que o issue tenha o ID 1300.
+Descreva o issue de forma mais clara possível, sempre usando usando algum casa de uso. Casa haja alguma melhoria de código ou de funcionalidade, tente justificar o motivo.
 
-```sh
-$ redu (master) > git pull origin master
-$ redu (master) > git checkout -b issue-1300
-$ redu (issue-1300) > git commit -a -m "Minhas modificações"
-$ redu (issue-1300) > git push origin issue-1300
-```
+Sempre tente seguir esse checklist para reportar um issue:
 
-Para mais informações sobre como fazer o pull request, consulte [este](https://help.github.com/articles/using-pull-requests) post.
+- Adicione um título claro do que se trata o issue
+- Se for um bug, escreva uma descrição mostrando em que ambiente e como aconteceu o erro. Um vídeo ou uma imagem pode ajudar na reprodução do erro.
+- Se for uma melhoria, descreva detalhamente o motivo da melhoria que você pretende adicionar.
 
 #### Reportando issues da API
 
 O primeiro passo é decidir em qual repositório criar o issue:
 
-- Para bugs na API HTTP propriamente dita: https://github.com/redu/redu/issues
-- Para bugs na documentação: https://github.com/redu/redu.github.com/issues
-- Para bugs no encapsulador Java: https://github.com/redu/jredu/issues
-- Para bugs no encapsulador Python: https://github.com/redu/redupy/issues
+- Para bugs na API HTTP propriamente dita: https://github.com/OpenRedu/OpenRedu/issues
+- Para bugs na documentação: https://github.com/OpenRedu/redu.github.com
 
 Para problemas na API REST, É importante expressar os problemas em termos de HTTP e não da linguagem utilizada. Por exemplo, ao invés de dizer que o método ``getUsers()`` está lançando null pointer, tentem explicar que uma requisição do tipo GET para ``/api/spaces/1/users`` está retornando o código 500. Fica mais fácil de investigar dessa forma.
 
@@ -125,13 +76,6 @@ Para problemas na API REST, É importante expressar os problemas em termos de HT
 
 O [DelayedJob](https://github.com/collectiveidea/delayed_job) é utilizado como infraestrutura para processamento de tarefas em background.
 
-Para reinicializar o DelayedJob, em produção, use ``monit restart``. Por exemplo:
-
-```sh
-$ > sudo monit restart delayed_job.0
-$ > sudo monit restart delayed_job.1
-$ > sudo monit restart delayed_job.2
-$ > sudo monit restart delayed_job.3
 ```
 
 #### Responsabilidades de cada worker do Delayed Job
@@ -143,8 +87,6 @@ $ > sudo monit restart delayed_job.3
 
 ### Serviço de entrega de e-mails
 
-Nossos e-mails são entregues pelo [Amazon SES](http://aws.amazon.com/ses/). Como a entrega de e-mails é uma tarefa excessivamente bloqueante, isso é feito em segundo plano pelo [DelayedJob](https://github.com/collectiveidea/delayed_job#rails-3-mailers).
-
 Para utilizar entrega em segundo plano, é necessário chamar o método do ActionMailer da seguinte forma: ``object.delay(:queue => 'email').method``. Onde ``method`` é tipo de notificação que deve ser gerada. Por exemplo, para enviar o e-mail de convite, a chamada seria a seguinte:
 
 ```ruby
@@ -155,77 +97,6 @@ UserNotifier.delay(:queue => 'email').external_user_course_invitation(user_cours
 
 
 Para mais informações de uso: ``bundle exec ar_sendmail_rails3 -h``
-
-### Deploy
-
-O Redu (http://www.redu.com.br) funciona na infraestrutura da [Amazon](http://aws.amazon.com/) através do [EngineYard](http://www.engineyard.com/). Assumindo que você possua as permissões necessárias, para realizar o deploy basta executar o seguinte comando:
-
-```
-$ > ey deploy -a redu -r master --migrate
-```
-
-#### Gems em repositórios privados
-
-Existem duas formas de utilizar Gems privados no Redu:
-
-A primeira é colocá-lo em um repositório privado e dar acesso ao usuário [tiago-redu](http://github.com/tiago-redu). Este usuário possui as credenciais da instância ``app_master``.
-
-A segunda é utilizar o servidor de Gem privado [The Shire](http://github.com/redu/the-shire).
-
-
-#### SSH
-
-Para realizar login na instância do Redu via SSH basta executar o seguinte comando:
-
-```sh
-$ > ey ssh -e production
-
-```
-
-Ou simplesmente faça login através do SSH:
-
-```sh
-$ > ssh deploy@redu.com.br
-```
-
-#### Monitoramento de processos
-
-Em produção utilizamos o [Monit](http://mmonit.com/monit/) para monitorar processos. Para saber quais processos são monitorados e seus estados use a opção ``summary``:
-
-```sh
-$ sudo monit summary
-The Monit daemon 5.0.3 uptime: 7d 22h 12m
-
-Process 'solr_redu_9080'            running
-Process 'rabbitmq_ssh_tunnel'       running
-Process 'nrsysmond'                 running
-Process 'mongo_ssh_tunnel'          running
-Process 'mini_httpd'                running
-Process 'delayed_job.3'             running
-Process 'delayed_job.2'             running
-Process 'delayed_job.1'             running
-Process 'delayed_job.0'             running
-System 'domU-12-31-39-09-9C-54'     running
-```
-
-Para mais informações sobre como utilizar o monit, execute ``sudo monit -h``.
-
-#### nginx
-
-Em produção o Redu funciona através do [Passenger](http://www.modrails.com/documentation/Users%20guide%20Nginx.html) (com o nginx). Para reiniciar o servidor basta reinicializar o serviço nginx:
-
-```sh
-$ > /etc/init.d/niginx restart
-```
-
-#### Cache
-
-Utilizamos o [Memcached](http://memcached.org/) como sistema de *caching*, o [setup](https://support.cloud.engineyard.com/entries/22375358-Using-Memcached-on-Engine-Yard-Cloud) é feito por default pelo Engine Yard (ambiente em *cluster*). Nós apenas configuramos para usar o cliente [Dalli](https://github.com/mperham/dalli) em produção.
-
-# Espaço utilizado
-
-Para ver todo o espaço utilizado nas intâncias use o seguinte comando:
-`sudo du -H --max-depth=1 .`
 
 # Licença Utilizada
 

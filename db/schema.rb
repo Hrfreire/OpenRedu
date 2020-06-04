@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20161011005143) do
+ActiveRecord::Schema.define(:version => 20170928125123) do
 
   create_table "alternatives", :force => true do |t|
     t.text     "text"
@@ -74,12 +74,14 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
   create_table "chat_messages", :force => true do |t|
     t.integer  "user_id"
     t.integer  "contact_id"
-    t.text     "message"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.text     "body"
+    t.integer  "conversation_id"
   end
 
   add_index "chat_messages", ["contact_id"], :name => "index_chat_messages_on_contact_id"
+  add_index "chat_messages", ["conversation_id"], :name => "index_chat_messages_on_conversation_id"
   add_index "chat_messages", ["user_id"], :name => "index_chat_messages_on_user_id"
 
   create_table "chats", :force => true do |t|
@@ -105,22 +107,20 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
   add_index "choices", ["user_id", "question_id"], :name => "index_choices_on_user_id_and_question_id", :unique => true
 
   create_table "ckeditor_assets", :force => true do |t|
-    t.string   "data_file_name",                                 :null => false
+    t.string   "data_file_name",                  :null => false
     t.string   "data_content_type"
     t.integer  "data_file_size"
     t.integer  "assetable_id"
     t.string   "assetable_type",    :limit => 30
-    t.string   "type",              :limit => 25
-    t.string   "guid",              :limit => 10
-    t.integer  "locale",            :limit => 1,  :default => 0
-    t.integer  "user_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
+    t.string   "type",              :limit => 30
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
-  add_index "ckeditor_assets", ["assetable_type", "assetable_id"], :name => "fk_assetable"
-  add_index "ckeditor_assets", ["assetable_type", "type", "assetable_id"], :name => "idx_assetable_type"
-  add_index "ckeditor_assets", ["user_id"], :name => "fk_user"
+  add_index "ckeditor_assets", ["assetable_type", "assetable_id"], :name => "idx_ckeditor_assetable"
+  add_index "ckeditor_assets", ["assetable_type", "type", "assetable_id"], :name => "idx_ckeditor_assetable_type"
 
   create_table "client_applications", :force => true do |t|
     t.string   "name"
@@ -147,6 +147,16 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "conversations", :force => true do |t|
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "conversations", ["recipient_id"], :name => "index_conversations_on_recipient_id"
+  add_index "conversations", ["sender_id"], :name => "index_conversations_on_sender_id"
 
   create_table "course_enrollments", :force => true do |t|
     t.integer  "user_id"
@@ -207,12 +217,11 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
     t.datetime "attachment_updated_at"
-    t.integer  "ipaper_id"
-    t.string   "ipaper_access_key"
     t.string   "state"
     t.boolean  "published",               :default => false
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.integer  "livredoc_id"
   end
 
   create_table "educations", :force => true do |t|
@@ -342,26 +351,6 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "invoices", :force => true do |t|
-    t.date     "period_start"
-    t.date     "period_end"
-    t.datetime "due_at"
-    t.string   "currency",                                       :default => "BRL"
-    t.string   "state"
-    t.decimal  "amount",           :precision => 8, :scale => 2
-    t.text     "description"
-    t.integer  "plan_id"
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
-    t.decimal  "previous_balance", :precision => 8, :scale => 2, :default => 0.0
-    t.text     "audit"
-    t.string   "type"
-    t.boolean  "current",                                        :default => false
-  end
-
-  add_index "invoices", ["current"], :name => "index_invoices_on_current"
-  add_index "invoices", ["plan_id"], :name => "index_invoices_on_plan_id"
-
   create_table "lectures", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -381,19 +370,6 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
   add_index "lectures", ["lectureable_id", "lectureable_type"], :name => "lectures_lectureable_id_and_type"
   add_index "lectures", ["subject_id"], :name => "index_lectures_on_subject_id"
   add_index "lectures", ["user_id"], :name => "index_lectures_on_user_id"
-
-  create_table "licenses", :force => true do |t|
-    t.string   "name"
-    t.string   "login"
-    t.string   "email"
-    t.date     "period_start"
-    t.date     "period_end"
-    t.string   "role"
-    t.integer  "invoice_id"
-    t.integer  "course_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
 
   create_table "messages", :force => true do |t|
     t.integer  "sender_id"
@@ -449,50 +425,20 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
     t.datetime "updated_at"
   end
 
-  create_table "partner_environment_associations", :force => true do |t|
-    t.integer  "environment_id"
-    t.integer  "partner_id"
-    t.string   "cnpj"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.string   "address"
-    t.string   "company_name"
-  end
-
-  create_table "partner_user_associations", :force => true do |t|
-    t.integer  "partner_id"
-    t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "partners", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "email"
-    t.string   "cnpj"
-    t.string   "address"
-  end
-
   create_table "plans", :force => true do |t|
     t.string   "state"
     t.string   "name"
     t.integer  "video_storage_limit"
     t.integer  "members_limit"
     t.integer  "file_storage_limit"
-    t.decimal  "price",               :precision => 8, :scale => 2
     t.integer  "user_id"
     t.integer  "billable_id"
     t.string   "billable_type"
-    t.datetime "created_at",                                                           :null => false
-    t.datetime "updated_at",                                                           :null => false
-    t.date     "billing_date"
-    t.decimal  "yearly_price",        :precision => 8, :scale => 2
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.text     "billable_audit"
     t.string   "type"
-    t.decimal  "membership_fee",      :precision => 8, :scale => 2
-    t.boolean  "current",                                           :default => false
+    t.boolean  "current",             :default => false
   end
 
   add_index "plans", ["current"], :name => "index_plans_on_current"
@@ -768,6 +714,8 @@ ActiveRecord::Schema.define(:version => 20161011005143) do
     t.string   "languages"
     t.text     "favorite_quotation"
     t.boolean  "destroy_soon"
+    t.string   "recovery_token"
+    t.string   "channel"
   end
 
   add_index "users", ["activated_at"], :name => "index_users_on_activated_at"
