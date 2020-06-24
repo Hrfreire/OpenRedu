@@ -25,7 +25,7 @@ class Question < ActiveRecord::Base
     :foreign_key => :question_id, :conditions => { :correct => true }
 
   has_attached_file :image, Redu::Application.config.paperclip_question_image
-  
+
   validates_presence_of :statement
   validates :alternatives, :unique_truth => true
 

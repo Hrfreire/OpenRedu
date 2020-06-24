@@ -55,7 +55,7 @@ Redu::Application.configure do
   })
 
   config.paperclip_question_image.merge!(config.paperclip)
-  
+
   config.paperclip_myfiles = config.paperclip.merge({:styles => {}})
   config.video_original = config.paperclip.merge({:styles => {}})
   config.video_transcoded = config.paperclip.merge({:styles => {}})
