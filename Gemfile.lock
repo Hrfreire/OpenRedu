@@ -475,4 +475,3 @@ DEPENDENCIES
   webmock
   whenever
   yajl-ruby
-  zencoder
