@@ -222,6 +222,9 @@ class LecturesController < BaseController
 
     respond_to do |format|
       format.js { render 'lectures/admin/update' }
+      format.html { redirect_to space_subject_lecture_path(@subject.space,
+                                                           @subject,
+                                                           @lecture) }
     end
   end
 
