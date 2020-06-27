@@ -22,7 +22,6 @@
 //= require underscore
 //= require embedly
 //= require timeago
-
 // Somente para a nav global: início
 //= require bootstrap-redu-dropdown
 //= require bootstrap-nav-global
